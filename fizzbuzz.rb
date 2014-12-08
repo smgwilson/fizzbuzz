@@ -1,26 +1,42 @@
+# to run from command line, type "ruby fizzbuzz.rb 'input.txt'"
+
 class FizzBuzz
 
-  f = File.open('input.txt')
+  def self.process_file(path)
+    f = File.open(path)
 
-  f.each_line do |line|
-    int_array = line.gsub(/\s+/, ' ').strip.split(" ")
-      counter = int_array[2].to_i
-      y = int_array[1].to_i
-      x = int_array[0].to_i
-      1.upto(counter) do |i|
-        if i % x == 0 and i % y == 0
-          print "FB "
-        elsif i % x == 0
-          print "F "
-        elsif i % y == 0
-          print "B "
-        else
-          print i.to_s + " "
-        end
-      end
-    puts "\n"
+    output = ""
+    f.each_line do |line|
+      x,y,n = line.split(/\s+/).map {|s| s.to_i }
+      output_line = FizzBuzz.process_triple(n,y,x)
+      output += output_line
+    end
+    #do stuff, make output_str
+
+    f.close
+
+    return output
   end
 
-  f.close
+  def self.process_triple(n,y,x)
+    arr = []
+    1.upto(n) do |i|
+      if i % x == 0 && i % y == 0
+        arr << "FB"
+      elsif i % x == 0
+        arr << "F"
+      elsif i % y == 0
+        arr << "B"
+      else
+        arr << i.to_s
+      end
+    end
+    return arr.join(" ") + "\n"
+
+  end
 
 end
+
+path = ARGV[0]
+output = FizzBuzz.process_file(path)
+$stdout.write(output)
